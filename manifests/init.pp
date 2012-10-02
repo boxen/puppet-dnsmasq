@@ -1,13 +1,13 @@
 class dnsmasq {
   require dnsmasq::config
 
-  package { 'github/brews/dnsmasq':
-    ensure => '2.57-github1',
-    notify => Service['com.github.dnsmasq']
+  package { 'boxen/brews/dnsmasq':
+    ensure => '2.57-boxen1',
+    notify => Service['com.boxen.dnsmasq']
   }
 
-  service { 'com.github.dnsmasq':
+  service { 'com.boxen.dnsmasq':
     ensure  => running,
-    require => Package['github/brews/dnsmasq']
+    require => Package['boxen/brews/dnsmasq']
   }
 }
