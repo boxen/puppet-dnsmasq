@@ -6,7 +6,7 @@
 }
 
 puppets=`find manifests -name '*.pp' -print`
-rubies=`find lib spec -name '*.rb' -print 2>/dev/null`
+rubies=`find lib spec -name '*.rb' -not -path 'spec/fixtures/*' -print 2>/dev/null`
 
 echo "Syntax"
 echo "------"
