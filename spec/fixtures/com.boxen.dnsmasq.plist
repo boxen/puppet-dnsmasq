@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.boxen.dnsmasq</string>
+
+    <key>Boxen</key>
+    <dict>
+      <key>Description</key>
+      <string>Redirects *.dev DNS requests to localhost.</string>
+    </dict>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/opt/boxen/homebrew/sbin/dnsmasq</string>
+      <string>--conf-file=/opt/boxen/config/dnsmasq/dnsmasq.conf</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true />
+
+    <key>KeepAlive</key>
+    <true />
+
+    <key>WorkingDirectory</key>
+    <string>/opt/boxen/data/dnsmasq</string>
+
+    <key>StandardErrorPath</key>
+    <string>/opt/boxen/log/dnsmasq/console.log</string>
+
+    <key>StandardOutPath</key>
+    <string>/opt/boxen/log/dnsmasq/console.log</string>
+  </dict>
+</plist>
