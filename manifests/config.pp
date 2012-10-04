@@ -1,3 +1,8 @@
+# Internal: Configure dnsmasq.
+#
+# Examples
+#
+#   include dnsmasq::config
 class dnsmasq::config {
   require boxen::config
 
