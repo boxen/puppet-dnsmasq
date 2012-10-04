@@ -1,3 +1,8 @@
+# Public: Install and configure dnsmasq from homebrew.
+#
+# Examples
+#
+#   include dnsmasq
 class dnsmasq {
   require dnsmasq::config
 
