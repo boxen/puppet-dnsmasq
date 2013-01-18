@@ -8,11 +8,16 @@ class dnsmasq {
 
   package { 'boxen/brews/dnsmasq':
     ensure => '2.57-boxen1',
-    notify => Service['com.boxen.dnsmasq']
+    notify => Service['dev.dnsmasq']
   }
 
-  service { 'com.boxen.dnsmasq':
+  service { 'dev.dnsmasq':
     ensure  => running,
     require => Package['boxen/brews/dnsmasq']
+  }
+
+  service { 'com.boxen.dnsmasq': # replaced by dev.dnsmasq
+    before => Service['dev.dnsmasq'],
+    enable => false
   }
 }
