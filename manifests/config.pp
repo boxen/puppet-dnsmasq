@@ -18,15 +18,15 @@ class dnsmasq::config {
   }
 
   file { "${configdir}/dnsmasq.conf":
-    notify  => Service['com.boxen.dnsmasq'],
+    notify  => Service['dev.dnsmasq'],
     require => File[$configdir],
     source  => 'puppet:///modules/dnsmasq/dnsmasq.conf'
   }
 
-  file { '/Library/LaunchDaemons/com.boxen.dnsmasq.plist':
-    content => template('dnsmasq/com.boxen.dnsmasq.plist.erb'),
+  file { '/Library/LaunchDaemons/dev.dnsmasq.plist':
+    content => template('dnsmasq/dev.dnsmasq.plist.erb'),
     group   => 'wheel',
-    notify  => Service['com.boxen.dnsmasq'],
+    notify  => Service['dev.dnsmasq'],
     owner   => 'root'
   }
 

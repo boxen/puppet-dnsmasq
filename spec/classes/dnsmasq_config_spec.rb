@@ -19,17 +19,17 @@ describe 'dnsmasq::config' do
 
   it do
     should contain_file("#{confdir}/dnsmasq/dnsmasq.conf").with({
-      :notify  => 'Service[com.boxen.dnsmasq]',
+      :notify  => 'Service[dev.dnsmasq]',
       :require => "File[#{confdir}/dnsmasq]",
       :source  => 'puppet:///modules/dnsmasq/dnsmasq.conf',
     })
   end
 
   it do
-    should contain_file('/Library/LaunchDaemons/com.boxen.dnsmasq.plist').with({
-      :content => File.read('spec/fixtures/com.boxen.dnsmasq.plist'),
+    should contain_file('/Library/LaunchDaemons/dev.dnsmasq.plist').with({
+      :content => File.read('spec/fixtures/dev.dnsmasq.plist'),
       :group   => 'wheel',
-      :notify  => 'Service[com.boxen.dnsmasq]',
+      :notify  => 'Service[dev.dnsmasq]',
       :owner   => 'root',
     })
   end

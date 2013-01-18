@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>com.boxen.dnsmasq</string>
+    <string>dev.dnsmasq</string>
 
     <key>Boxen</key>
     <dict>
@@ -13,8 +13,8 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string><%= scope.lookupvar "dnsmasq::config::executable" %></string>
-      <string>--conf-file=<%= scope.lookupvar "dnsmasq::config::configfile" %></string>
+      <string>/opt/boxen/homebrew/sbin/dnsmasq</string>
+      <string>--conf-file=/opt/boxen/config/dnsmasq/dnsmasq.conf</string>
     </array>
 
     <key>RunAtLoad</key>
@@ -24,12 +24,12 @@
     <true />
 
     <key>WorkingDirectory</key>
-    <string><%= scope.lookupvar "dnsmasq::config::datadir" %></string>
+    <string>/opt/boxen/data/dnsmasq</string>
 
     <key>StandardErrorPath</key>
-    <string><%= scope.lookupvar "dnsmasq::config::logfile" %></string>
+    <string>/opt/boxen/log/dnsmasq/console.log</string>
 
     <key>StandardOutPath</key>
-    <string><%= scope.lookupvar "dnsmasq::config::logfile" %></string>
+    <string>/opt/boxen/log/dnsmasq/console.log</string>
   </dict>
 </plist>
