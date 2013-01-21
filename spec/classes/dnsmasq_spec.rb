@@ -15,12 +15,12 @@ describe 'dnsmasq' do
   it do
     should contain_package('boxen/brews/dnsmasq').with({
       :ensure => '2.57-boxen1',
-      :notify => 'Service[com.boxen.dnsmasq]',
+      :notify => 'Service[dev.dnsmasq]',
     })
   end
 
   it do
-    should contain_service('com.boxen.dnsmasq').with({
+    should contain_service('dev.dnsmasq').with({
       :ensure  => 'running',
       :require => 'Package[boxen/brews/dnsmasq]',
     })
