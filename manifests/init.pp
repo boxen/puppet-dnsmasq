@@ -3,57 +3,94 @@
 # Examples
 #
 #   include dnsmasq
-class dnsmasq {
-  require homebrew
-  require dnsmasq::config
+class dnsmasq(
+  $ensure    = present,
 
-  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir]:
-    ensure => directory
+  $configdir = $dnsmasq::params::configdir,
+  $datadir   = $dnsmasq::params::datadir,
+  $dnsmasq   = $dnsmasq::params::dnsmasq,
+  $logdir    = $dnsmasq::params::logdir,
+  $package   = $dnsmasq::params::package,
+  $service   = $dnsmasq::params::service,
+  $version   = $dnsmasq::params::version,
+) inherits dnsmasq::params {
+
+  validate_re($ensure, '^(present|absent)$',
+    "Dnsmasq[${name}] ensure must be present|absent, is ${ensure}")
+
+  if $ensure == absent {
+    $dir_ensure  = absent
+    $file_ensure = absent
+    $pkg_ensure  = absent
+    $svc_ensure  = stopped
+    $svc_enabled = false
+    
+    File {
+      require => Package['dnsmasq']
+    }
+    
+    Package {
+      require => Service['dnsmasq']
+    }
+  } else {
+    $dir_ensure  = directory
+    $file_ensure = present
+    $pkg_ensure  = $version
+    $svc_ensure  = running
+    $svc_enabled = true
+    
+    File {
+      before => Package['dnsmasq']
+      notify => Service['dnsmasq'],
+    }
+    
+    Package {
+      notify => Service['dnsmasq']
+    }
   }
 
-  file { "${dnsmasq::config::configdir}/dnsmasq.conf":
-    notify  => Service['dev.dnsmasq'],
-    require => File[$dnsmasq::config::configdir],
-    source  => 'puppet:///modules/dnsmasq/dnsmasq.conf'
+  $configfile = "${configdir}/dnsmasq.conf"
+  $logfile    = "${logdir}/console.log"
+
+  case $::osfamily {
+    Darwin: {
+      include homebrew
+
+      homebrew::formula { 'dnsmasq':
+        before => Package['dnsmasq'],
+      }
+    }
+    
+    default: {
+      #noop
+    }
   }
 
-  file { '/Library/LaunchDaemons/dev.dnsmasq.plist':
-    content => template('dnsmasq/dev.dnsmasq.plist.erb'),
-    group   => 'wheel',
-    notify  => Service['dev.dnsmasq'],
-    owner   => 'root'
+  file {
+    [$configdir, $logdir]:
+      ensure => $dir_ensure ;
+    $configfile:
+      ensure => $file_ensure,
+      source => 'puppet:///modules/dnsmasq/dnsmasq.conf' ;
+    '/etc/resolver':
+      ensure => $dir_ensure,
+      group  => 'wheel',
+      owner  => 'root' ;
   }
 
-  file { '/etc/resolver':
-    ensure => directory,
-    group  => 'wheel',
-    owner  => 'root'
+  package { 'dnsmasq':
+    ensure => $pkg_ensure,
+    name   => $package,
   }
 
-  file { '/etc/resolver/dev':
-    content => 'nameserver 127.0.0.1',
-    group   => 'wheel',
-    owner   => 'root',
-    require => File['/etc/resolver'],
-    notify  => Service['dev.dnsmasq'],
+  service { 'dnsmasq':
+    ensure  => $svc_ensure,
+    name    => $service,
+    enabled => $svc_enabled,
   }
-
-  homebrew::formula { 'dnsmasq':
-    before => Package['boxen/brews/dnsmasq'],
-  }
-
-  package { 'boxen/brews/dnsmasq':
-    ensure => '2.57-boxen1',
-    notify => Service['dev.dnsmasq']
-  }
-
-  service { 'dev.dnsmasq':
-    ensure  => running,
-    require => Package['boxen/brews/dnsmasq']
-  }
-
-  service { 'com.boxen.dnsmasq': # replaced by dev.dnsmasq
-    before => Service['dev.dnsmasq'],
-    enable => false
+  
+  dnsmasq::resolver { 'dev':
+    ensure     => $file_ensure,
+    nameserver => '127.0.0.1'
   }
 }
