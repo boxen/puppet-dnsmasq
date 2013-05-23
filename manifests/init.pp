@@ -23,7 +23,7 @@ class dnsmasq(
     $file_ensure = absent
     $pkg_ensure  = absent
     $svc_ensure  = stopped
-    $svc_enabled = false
+    $svc_enable  = false
     
     File {
       require => Package['dnsmasq']
@@ -37,10 +37,10 @@ class dnsmasq(
     $file_ensure = present
     $pkg_ensure  = $version
     $svc_ensure  = running
-    $svc_enabled = true
+    $svc_enable  = true
     
     File {
-      before => Package['dnsmasq']
+      before => Package['dnsmasq'],
       notify => Service['dnsmasq'],
     }
     
@@ -84,9 +84,9 @@ class dnsmasq(
   }
 
   service { 'dnsmasq':
-    ensure  => $svc_ensure,
-    name    => $service,
-    enabled => $svc_enabled,
+    ensure => $svc_ensure,
+    name   => $service,
+    enable => $svc_enable,
   }
   
   dnsmasq::resolver { 'dev':

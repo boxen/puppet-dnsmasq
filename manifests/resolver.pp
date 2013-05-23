@@ -4,7 +4,8 @@ define dnsmasq::resolver(
 ) {
   require dnsmasq
   
-  validate_ipv4_address($nameserver)
+  # TODO: enable if and when stdlib gets this
+  #validate_ipv4_address($nameserver)
 
   validate_re($ensure, '^(present|absent)$',
     "Dnsmasq::Resolver[${name}] ensure must be present|absent, is ${ensure}")

@@ -8,20 +8,12 @@ describe "dnsmasq" do
 
     should contain_homebrew__formula("dnsmasq")
 
-    should contain_file("/Library/LaunchDaemons/dev.dnsmasq.plist").with({
-      :ensure => "present",
-      :group  => "wheel",
-      :owner  => "root",
-      :notify => "Service[dnsmasq]",
-    })
-
     should contain_file("/test/boxen/config/dnsmasq").with_ensure("directory")
     should contain_file("/test/boxen/log/dnsmasq").with_ensure("directory")
 
     should contain_file("/test/boxen/config/dnsmasq/dnsmasq.conf").with({
       :ensure => "present",
       :source => "puppet:///modules/dnsmasq/dnsmasq.conf",
-      :notify => "Service[dnsmasq]",
     })
 
     should contain_file("/etc/resolver").with({
@@ -30,32 +22,28 @@ describe "dnsmasq" do
       :owner  => "root",
     })
 
-    should contain_file("/etc/resolver/dev").with({
-      :content => "nameserver 127.0.0.1",
-      :group   => "wheel",
-      :owner   => "root",
+    should contain_dnsmasq__resolver('dev').with({
+      :ensure => "present",
+      :nameserver => "127.0.0.1"
     })
 
     should contain_package("dnsmasq").with({
       :ensure => "2.57-boxen1",
       :name   => "boxen/brews/dnsmasq",
-      :notify => "Service[dnsmasq]",
     })
 
     should contain_service("dnsmasq").with({
       :ensure  => "running",
-      :enabled => true,
+      :enable  => true,
       :name    => "dev.dnsmasq",
-      :require => "Package[dnsmasq]",
     })
   end
 
   context "Linux" do
+    let(:facts) { default_test_facts.merge(:osfamily => "Linux") }
+
     it do
       should_not include_class("homebrew")
-
-      should_not contain_file("/Library/LaunchDaemons/dev.dnsmasq.plist")
-
       should_not contain_homebrew__formula("dnsmasq")
     end
   end
@@ -68,12 +56,11 @@ describe "dnsmasq" do
     end
     
     it do
-      should contain_file("/Library/LaunchDaemons/dev.dnsmasq.plist").with_ensure("absent")
       should contain_file("/test/boxen/config/dnsmasq").with_ensure("absent")
       should contain_file("/test/boxen/log/dnsmasq").with_ensure("absent")
       should contain_file("/test/boxen/config/dnsmasq/dnsmasq.conf").with_ensure("absent")
       should contain_file("/etc/resolver").with_ensure("absent")
-      should contain_file("/etc/resolver/dev").with_ensure("absent")
+      should contain_dnsmasq__resolver("dev").with_ensure("absent")
       should contain_package("dnsmasq").with_ensure("absent")
       should contain_service("dnsmasq").with_ensure("stopped")
     end
