@@ -9,7 +9,6 @@ describe 'dnsmasq' do
     {
       :boxen_home   => '/opt/boxen',
       :boxen_user   => 'testuser',
-      :luser        => 'testuser',
       :boxen_srcdir => '/tmp/src',
       :github_login => 'testuser',
     }
