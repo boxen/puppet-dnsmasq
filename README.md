@@ -1,6 +1,6 @@
 # Dnsmasq Puppet Module for Boxen
 
-[![Build Status](https://travis-ci.org/boxen/puppet-dnsmasq.png?branch=master)](https://travis-ci.org/boxen/puppet-dnsmasq)
+[![Build Status](https://travis-ci.org/boxen/puppet-dnsmasq.png)](https://travis-ci.org/boxen/puppet-dnsmasq)
 
 Install the [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 local resolver. After this module is included the `.dev` domain will
