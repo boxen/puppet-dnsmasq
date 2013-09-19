@@ -38,6 +38,14 @@ class dnsmasq {
     notify  => Service['dev.dnsmasq'],
   }
 
+  file { '/etc/resolver/localhost':
+    content => 'nameserver 127.0.0.1',
+    group   => 'wheel',
+    owner   => 'root',
+    require => File['/etc/resolver'],
+    notify  => Service['dev.dnsmasq'],
+  }
+
   homebrew::formula { 'dnsmasq':
     before => Package['boxen/brews/dnsmasq'],
   }
