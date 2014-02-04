@@ -1,10 +1,10 @@
 require 'formula'
 
 class Dnsmasq < Formula
-  url 'http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.57.tar.gz'
+  url 'http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.66.tar.gz'
   homepage 'http://www.thekelleys.org.uk/dnsmasq/doc.html'
-  sha1 '37e36564f8acfd94af0455fa2a43daf9f2338b76'
-  version '2.57-boxen1'
+  sha1 'fb6b1690de53014a8e6c8bfa6f1653062b965741'
+  version '2.66-boxen1'
 
   def options
     [['--with-idn', "Compile with IDN support"]]
