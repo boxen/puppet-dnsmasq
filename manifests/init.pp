@@ -7,7 +7,7 @@ class dnsmasq {
   require homebrew
   require dnsmasq::config
 
-  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir]:
+  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir, $dnsmasq::config::datadir]:
     ensure => directory
   }
 
