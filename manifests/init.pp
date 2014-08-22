@@ -7,7 +7,7 @@ class dnsmasq {
   require homebrew
   require dnsmasq::config
 
-  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir]:
+  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir, $dnsmasq::config::datadir]:
     ensure => directory
   }
 
@@ -43,7 +43,7 @@ class dnsmasq {
   }
 
   package { 'boxen/brews/dnsmasq':
-    ensure => '2.57-boxen1',
+    ensure => '2.71-boxen1',
     notify => Service['dev.dnsmasq']
   }
 

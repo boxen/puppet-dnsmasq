@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
     <key>Label</key>
@@ -15,13 +15,17 @@
     <array>
       <string>/opt/boxen/homebrew/sbin/dnsmasq</string>
       <string>--conf-file=/opt/boxen/config/dnsmasq/dnsmasq.conf</string>
+      <string>--keep-in-foreground</string>
     </array>
 
     <key>RunAtLoad</key>
     <true />
 
     <key>KeepAlive</key>
-    <true />
+    <dict>
+      <key>NetworkState</key>
+      <true/>
+    </dict>
 
     <key>WorkingDirectory</key>
     <string>/opt/boxen/data/dnsmasq</string>
