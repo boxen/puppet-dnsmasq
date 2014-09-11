@@ -3,39 +3,61 @@
 # Examples
 #
 #   include dnsmasq
-class dnsmasq {
-  require homebrew
-  require dnsmasq::config
+class dnsmasq(
+  $host       = undef,
+  $tld        = undef,
 
-  file { [$dnsmasq::config::configdir, $dnsmasq::config::logdir, $dnsmasq::config::datadir]:
+  $configdir  = undef,
+  $configfile = undef,
+  $datadir    = undef,
+  $executable = undef,
+  $logdir     = undef,
+  $logfile    = undef,
+) {
+  require homebrew
+
+  $servicename = "${tld}.dnsmasq"
+
+  class { 'dnsmasq::config':
+    configdir  => $configdir,
+    configfile => $configfile,
+    datadir    => $datadir,
+    executable => $executable,
+    logdir     => $logdir,
+    logfile    => $logfile,
+  }
+
+  #require dnsmasq::config
+
+  file { [$configdir, $logdir, $datadir]:
     ensure => directory
   }
 
-  file { "${dnsmasq::config::configdir}/dnsmasq.conf":
+  file { "${configdir}/dnsmasq.conf":
+    content => template('dnsmasq/dnsmasq.conf.erb'),
     notify  => Service['dev.dnsmasq'],
-    require => File[$dnsmasq::config::configdir],
-    source  => 'puppet:///modules/dnsmasq/dnsmasq.conf'
+    require => File[$configdir],
   }
 
   file { '/Library/LaunchDaemons/dev.dnsmasq.plist':
     content => template('dnsmasq/dev.dnsmasq.plist.erb'),
     group   => 'wheel',
-    notify  => Service['dev.dnsmasq'],
-    owner   => 'root'
+    notify  => Service[$servicename],
+    owner   => 'root',
   }
 
   file { '/etc/resolver':
     ensure => directory,
     group  => 'wheel',
-    owner  => 'root'
+    owner  => 'root',
   }
 
-  file { '/etc/resolver/dev':
-    content => 'nameserver 127.0.0.1',
+  file { "/etc/resolver/${tld}":
+    content => "nameserver ${host}",
     group   => 'wheel',
     owner   => 'root',
     require => File['/etc/resolver'],
-    notify  => Service['dev.dnsmasq'],
+    notify  => Service[$servicename],
   }
 
   homebrew::formula { 'dnsmasq':
@@ -44,16 +66,16 @@ class dnsmasq {
 
   package { 'boxen/brews/dnsmasq':
     ensure => '2.71-boxen1',
-    notify => Service['dev.dnsmasq']
+    notify => Service['dev.dnsmasq'],
   }
 
-  service { 'dev.dnsmasq':
+  service { $servicename:
     ensure  => running,
-    require => Package['boxen/brews/dnsmasq']
+    require => Package['boxen/brews/dnsmasq'],
   }
 
   service { 'com.boxen.dnsmasq': # replaced by dev.dnsmasq
-    before => Service['dev.dnsmasq'],
-    enable => false
+    before => Service[$servicename],
+    enable => false,
   }
 }
