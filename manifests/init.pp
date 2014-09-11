@@ -18,15 +18,6 @@ class dnsmasq(
 
   $servicename = "${tld}.dnsmasq"
 
-  class { 'dnsmasq::config':
-    configdir  => $configdir,
-    configfile => $configfile,
-    datadir    => $datadir,
-    executable => $executable,
-    logdir     => $logdir,
-    logfile    => $logfile,
-  }
-
   file { [$configdir, $logdir, $datadir]:
     ensure => directory
   }
