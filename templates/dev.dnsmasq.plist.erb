@@ -13,8 +13,8 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string><%= scope.lookupvar "dnsmasq::config::executable" %></string>
-      <string>--conf-file=<%= scope.lookupvar "dnsmasq::config::configfile" %></string>
+      <string><%= @executable %></string>
+      <string>--conf-file=<%= @configfile %></string>
       <string>--keep-in-foreground</string>
     </array>
 
@@ -28,12 +28,12 @@
     </dict>
 
     <key>WorkingDirectory</key>
-    <string><%= scope.lookupvar "dnsmasq::config::datadir" %></string>
+    <string><%= @datadir %></string>
 
     <key>StandardErrorPath</key>
-    <string><%= scope.lookupvar "dnsmasq::config::logfile" %></string>
+    <string><%= @logfile %></string>
 
     <key>StandardOutPath</key>
-    <string><%= scope.lookupvar "dnsmasq::config::logfile" %></string>
+    <string><%= @logfile %></string>
   </dict>
 </plist>
