@@ -4,6 +4,8 @@ describe 'dnsmasq' do
   let(:boxen_home) { '/opt/boxen' }
   let(:logdir) { "#{boxen_home}/log" }
   let(:confdir) { "#{boxen_home}/config" }
+  let(:tld) { 'dev' }
+  let(:host) { '127.0.0.1' }
 
   let(:facts) do
     {
@@ -16,7 +18,6 @@ describe 'dnsmasq' do
 
   it do
     should include_class('homebrew')
-    should include_class('dnsmasq::config')
 
     should contain_file("#{confdir}/dnsmasq").with_ensure('directory')
     should contain_file("#{logdir}/dnsmasq").with_ensure('directory')
