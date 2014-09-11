@@ -1,0 +1,6 @@
+bind-interfaces
+keep-in-foreground
+no-resolv
+
+address=/<%= scope.lookupvar("dnsmasq::tld") %>/<%= scope.lookupvar("dnsmasq::host")  %>
+listen-address=127.0.0.1
