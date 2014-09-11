@@ -27,15 +27,13 @@ class dnsmasq(
     logfile    => $logfile,
   }
 
-  #require dnsmasq::config
-
   file { [$configdir, $logdir, $datadir]:
     ensure => directory
   }
 
   file { "${configdir}/dnsmasq.conf":
     content => template('dnsmasq/dnsmasq.conf.erb'),
-    notify  => Service['dev.dnsmasq'],
+    notify  => Service[$servicename],
     require => File[$configdir],
   }
 
@@ -53,7 +51,7 @@ class dnsmasq(
   }
 
   file { "/etc/resolver/${tld}":
-    content => "nameserver ${host}",
+    content => "nameserver 127.0.0.1",
     group   => 'wheel',
     owner   => 'root',
     require => File['/etc/resolver'],
@@ -66,7 +64,7 @@ class dnsmasq(
 
   package { 'boxen/brews/dnsmasq':
     ensure => '2.71-boxen1',
-    notify => Service['dev.dnsmasq'],
+    notify => Service[$servicename],
   }
 
   service { $servicename:
