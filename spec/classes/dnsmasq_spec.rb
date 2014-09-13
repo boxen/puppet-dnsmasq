@@ -1,37 +1,45 @@
 require 'spec_helper'
 
 describe 'dnsmasq' do
-  let(:boxen_home) { '/opt/boxen' }
-  let(:logdir) { "#{boxen_home}/log" }
-  let(:confdir) { "#{boxen_home}/config" }
-  let(:tld) { 'dev' }
-  let(:host) { '127.0.0.1' }
 
-  let(:facts) do
-    {
-      :boxen_home   => '/opt/boxen',
-      :boxen_user   => 'testuser',
-      :boxen_srcdir => '/tmp/src',
-      :github_login => 'testuser',
-    }
-  end
+  let(:facts)       { default_test_facts }
+  let(:boxen_home)  { "/test/boxen" }
+  let(:configdir)   { "#{boxen_home}/config/dnsmasq" }
+  let(:configfile)  { "#{configdir}/dnsmasq.conf" }
+  let(:datadir)     { "#{boxen_home}/data/dnsmasq" }
+  let(:logdir)      { "#{boxen_home}/log/dnsmasq" }
+  let(:logfile)     { "#{logdir}/console.log" }
+  let(:executable)  { "#{boxen_home}/homebrew/sbin/dnsmasq" }
+  let(:tld)         { "dev" }
+  let(:servicename) { "#{tld}.dnsmasq" }
+  let(:params) {{
+    'host'       => "127.0.0.1",
+    'tld'        => tld,
+    'configdir'  => configdir,
+    'datadir'    => datadir,
+    'logdir'     => logdir,
+    'configfile' => configfile,
+    'logfile'    => logfile,
+    'executable' => executable,
+  }}
 
   it do
     should include_class('homebrew')
 
-    should contain_file("#{confdir}/dnsmasq").with_ensure('directory')
-    should contain_file("#{logdir}/dnsmasq").with_ensure('directory')
+    should contain_file(configdir).with_ensure('directory')
+    should contain_file(datadir).with_ensure('directory')
+    should contain_file(logdir).with_ensure('directory')
 
-    should contain_file("#{confdir}/dnsmasq/dnsmasq.conf").with({
-      :notify  => 'Service[dev.dnsmasq]',
-      :require => "File[#{confdir}/dnsmasq]",
-      :source  => 'puppet:///modules/dnsmasq/dnsmasq.conf',
+    should contain_file(configfile).with({
+      :content => File.read('spec/fixtures/dnsmasq.conf'),
+      :notify  => "Service[#{servicename}]",
+      :require => "File[#{configdir}]",
     })
 
     should contain_file('/Library/LaunchDaemons/dev.dnsmasq.plist').with({
       :content => File.read('spec/fixtures/dev.dnsmasq.plist'),
       :group   => 'wheel',
-      :notify  => 'Service[dev.dnsmasq]',
+      :notify  => "Service[#{servicename}]",
       :owner   => 'root',
     })
 
@@ -52,10 +60,10 @@ describe 'dnsmasq' do
 
     should contain_package('boxen/brews/dnsmasq').with({
       :ensure => '2.71-boxen1',
-      :notify => 'Service[dev.dnsmasq]',
+      :notify => "Service[#{servicename}]",
     })
 
-    should contain_service('dev.dnsmasq').with({
+    should contain_service(servicename).with({
       :ensure  => 'running',
       :require => 'Package[boxen/brews/dnsmasq]',
     })

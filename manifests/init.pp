@@ -15,11 +15,10 @@ class dnsmasq(
   $logfile    = undef,
 ) {
   require homebrew
-
   $servicename = "${tld}.dnsmasq"
 
   file { [$configdir, $logdir, $datadir]:
-    ensure => directory
+    ensure => directory,
   }
 
   file { "${configdir}/dnsmasq.conf":

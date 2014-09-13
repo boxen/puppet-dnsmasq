@@ -13,8 +13,8 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string>/opt/boxen/homebrew/sbin/dnsmasq</string>
-      <string>--conf-file=/opt/boxen/config/dnsmasq/dnsmasq.conf</string>
+      <string>/test/boxen/homebrew/sbin/dnsmasq</string>
+      <string>--conf-file=/test/boxen/config/dnsmasq/dnsmasq.conf</string>
       <string>--keep-in-foreground</string>
     </array>
 
@@ -28,12 +28,12 @@
     </dict>
 
     <key>WorkingDirectory</key>
-    <string>/opt/boxen/data/dnsmasq</string>
+    <string>/test/boxen/data/dnsmasq</string>
 
     <key>StandardErrorPath</key>
-    <string>/opt/boxen/log/dnsmasq/console.log</string>
+    <string>/test/boxen/log/dnsmasq/console.log</string>
 
     <key>StandardOutPath</key>
-    <string>/opt/boxen/log/dnsmasq/console.log</string>
+    <string>/test/boxen/log/dnsmasq/console.log</string>
   </dict>
 </plist>
