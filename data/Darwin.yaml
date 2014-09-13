@@ -1,0 +1,7 @@
+---
+dnsmasq::configdir:   "%{boxen::config::configdir}/dnsmasq"
+dnsmasq::configfile:  "%{boxen::config::configdir}/dnsmasq/dnsmasq.conf"
+dnsmasq::datadir:     "%{boxen::config::datadir}/dnsmasq"
+dnsmasq::executable:  "%{boxen::config::homebrewdir}/sbin/dnsmasq"
+dnsmasq::logdir:      "%{boxen::config::logdir}/dnsmasq"
+dnsmasq::logfile:     "%{boxen::config::logdir}/dnsmasq/console.log"
