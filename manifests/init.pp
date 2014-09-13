@@ -41,7 +41,7 @@ class dnsmasq(
   }
 
   file { "/etc/resolver/${tld}":
-    content => "nameserver 127.0.0.1",
+    content => 'nameserver 127.0.0.1',
     group   => 'wheel',
     owner   => 'root',
     require => File['/etc/resolver'],
