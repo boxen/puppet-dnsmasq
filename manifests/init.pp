@@ -28,7 +28,7 @@ class dnsmasq(
   }
 
   file { "/Library/LaunchDaemons/${tld}.dnsmasq.plist":
-    content => template("dnsmasq/${tld}.dnsmasq.plist.erb"),
+    content => template("dnsmasq/dev.dnsmasq.plist.erb"),
     group   => 'wheel',
     notify  => Service[$servicename],
     owner   => 'root',
