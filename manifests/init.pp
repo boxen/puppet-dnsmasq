@@ -27,8 +27,8 @@ class dnsmasq(
     require => File[$configdir],
   }
 
-  file { "/Library/LaunchDaemons/${tld}.dnsmasq.plist":
-    content => template("dnsmasq/${tld}.dnsmasq.plist.erb"),
+  file { '/Library/LaunchDaemons/dev.dnsmasq.plist':
+    content => template('dnsmasq/dev.dnsmasq.plist.erb'),
     group   => 'wheel',
     notify  => Service[$servicename],
     owner   => 'root',
