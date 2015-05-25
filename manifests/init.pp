@@ -15,7 +15,7 @@ class dnsmasq(
   $logfile    = undef,
 ) {
   require homebrew
-  $servicename = "$tld.dnsmasq"
+  $servicename = "${tld}.dnsmasq"
 
   file { [$configdir, $logdir, $datadir]:
     ensure => directory,
@@ -27,8 +27,8 @@ class dnsmasq(
     require => File[$configdir],
   }
 
-  file { "/Library/LaunchDaemons/$tld.dnsmasq.plist":
-    content => template("dnsmasq/dnsmasq.plist.erb"),
+  file { "/Library/LaunchDaemons/${tld}.dnsmasq.plist":
+    content => template('dnsmasq/dnsmasq.plist.erb'),
     group   => 'wheel',
     notify  => Service[$servicename],
     owner   => 'root',
