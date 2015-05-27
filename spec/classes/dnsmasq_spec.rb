@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'dnsmasq' do
- 
   let(:facts)       { default_test_facts }
   let(:boxen_home)  { "/test/boxen" }
   let(:configdir)   { "#{boxen_home}/config/dnsmasq" }
