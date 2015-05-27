@@ -67,7 +67,7 @@ describe 'dnsmasq' do
 
   context 'given a different tld' do
     let(:tld)         { "vagrant" }
-    let(:servicename) { "#{tld}.dnsmasq" }
+    let(:servicename) { "dev.dnsmasq" }
     let(:params) {{
       'host'       => "127.0.0.1",
       'tld'        => tld,
@@ -85,7 +85,7 @@ describe 'dnsmasq' do
         :require => "File[#{configdir}]",
       }).with_content(%r{\naddress=/vagrant/127.0.0.1\nlisten-address=127.0.0.1\n})
  
-      should contain_file('/Library/LaunchDaemons/vagrant.dnsmasq.plist').with({
+      should contain_file('/Library/LaunchDaemons/dev.dnsmasq.plist').with({
         :group   => 'wheel',
         :notify  => "Service[#{servicename}]",
         :owner   => 'root',
