@@ -10,7 +10,7 @@ describe 'dnsmasq' do
   let(:logfile)     { "#{logdir}/console.log" }
   let(:executable)  { "#{boxen_home}/homebrew/sbin/dnsmasq" }
   let(:tld)         { "dev" }
-  let(:servicename) { "#{tld}.dnsmasq" }
+  let(:service_name) { "#{tld}.dnsmasq" }
   let(:params) {{
     'host'       => "127.0.0.1",
     'tld'        => tld,
@@ -29,13 +29,13 @@ describe 'dnsmasq' do
     should contain_file(logdir).with_ensure('directory')
 
     should contain_file(configfile).with({
-      :notify  => "Service[#{servicename}]",
+      :notify  => "Service[#{service_name}]",
       :require => "File[#{configdir}]",
     }).with_content(%r{\naddress=/dev/127.0.0.1\nlisten-address=127.0.0.1\n})
 
     should contain_file('/Library/LaunchDaemons/dev.dnsmasq.plist').with({
       :group   => 'wheel',
-      :notify  => "Service[#{servicename}]",
+      :notify  => "Service[#{service_name}]",
       :owner   => 'root',
     }).with_content(%r{<string>#{tld}.dnsmasq</string>})
 
@@ -56,10 +56,10 @@ describe 'dnsmasq' do
 
     should contain_package('boxen/brews/dnsmasq').with({
       :ensure => '2.76-boxen2',
-      :notify => "Service[#{servicename}]",
+      :notify => "Service[#{service_name}]",
     })
 
-    should contain_service(servicename).with({
+    should contain_service(service_name).with({
       :ensure  => 'running',
       :require => 'Package[boxen/brews/dnsmasq]',
     })
@@ -67,7 +67,7 @@ describe 'dnsmasq' do
 
   context 'given a different tld' do
     let(:tld)         { "vagrant" }
-    let(:servicename) { "dev.dnsmasq" }
+    let(:service_name) { "#{tld}.dnsmasq" }
     let(:params) {{
       'host'       => "127.0.0.1",
       'tld'        => tld,
@@ -77,20 +77,20 @@ describe 'dnsmasq' do
       'configfile' => configfile,
       'logfile'    => logfile,
       'executable' => executable,
-    }} 
+    }}
     it do
- 
+
       should contain_file(configfile).with({
-        :notify  => "Service[#{servicename}]",
+        :notify  => "Service[#{service_name}]",
         :require => "File[#{configdir}]",
       }).with_content(%r{\naddress=/vagrant/127.0.0.1\nlisten-address=127.0.0.1\n})
- 
-      should contain_file('/Library/LaunchDaemons/dev.dnsmasq.plist').with({
+
+      should contain_file('/Library/LaunchDaemons/vagrant.dnsmasq.plist').with({
         :group   => 'wheel',
-        :notify  => "Service[#{servicename}]",
+        :notify  => "Service[#{service_name}]",
         :owner   => 'root',
       }).with_content(%r{<string>#{tld}.dnsmasq</string>})
- 
+
       should contain_file('/etc/resolver/vagrant').with({
         :content => 'nameserver 127.0.0.1',
         :group   => 'wheel',
