@@ -24,8 +24,6 @@ describe 'dnsmasq' do
   }}
 
   it do
-    should include_class('homebrew')
-
     should contain_file(configdir).with_ensure('directory')
     should contain_file(datadir).with_ensure('directory')
     should contain_file(logdir).with_ensure('directory')
