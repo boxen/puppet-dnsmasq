@@ -57,7 +57,7 @@ describe 'dnsmasq' do
     should contain_homebrew__formula('dnsmasq')
 
     should contain_package('boxen/brews/dnsmasq').with({
-      :ensure => '2.75-boxen1',
+      :ensure => '2.75',
       :notify => "Service[#{servicename}]",
     })
 
