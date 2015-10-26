@@ -3,6 +3,7 @@ class Dnsmasq < Formula
   homepage "http://www.thekelleys.org.uk/dnsmasq/doc.html"
   url "http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.75.tar.gz"
   sha256 "f8252c0a0ba162c2cd45f81140c7c17cc40a5fca2b869d1a420835b74acad294"
+  version "2.75-boxen1"
 
   bottle do
     cellar :any_skip_relocation
