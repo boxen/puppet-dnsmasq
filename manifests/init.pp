@@ -9,6 +9,7 @@ class dnsmasq(
 
   $configdir  = undef,
   $configfile = undef,
+  $searchdir  = undef,
   $datadir    = undef,
   $executable = undef,
   $logdir     = undef,
@@ -17,7 +18,7 @@ class dnsmasq(
   require homebrew
   $servicename = 'dev.dnsmasq'
 
-  file { [$configdir, $logdir, $datadir]:
+  file { [$configdir, $logdir, $datadir, $searchdir]:
     ensure => directory,
   }
 

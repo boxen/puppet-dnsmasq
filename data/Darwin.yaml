@@ -1,5 +1,6 @@
 ---
 dnsmasq::configdir:   "%{boxen::config::configdir}/dnsmasq"
+dnsmasq::searchdir:   "%{boxen::config::configdir}/dnsmasq/dnsmasq.d"
 dnsmasq::configfile:  "%{boxen::config::configdir}/dnsmasq/dnsmasq.conf"
 dnsmasq::datadir:     "%{boxen::config::datadir}/dnsmasq"
 dnsmasq::executable:  "%{boxen::config::homebrewdir}/sbin/dnsmasq"
