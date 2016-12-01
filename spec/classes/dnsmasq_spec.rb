@@ -5,6 +5,7 @@ describe 'dnsmasq' do
   let(:facts)       { default_test_facts }
   let(:boxen_home)  { "/test/boxen" }
   let(:configdir)   { "#{boxen_home}/config/dnsmasq" }
+  let(:searchdir)   { "#{boxen_home}/config/dnsmasq/dnsmasq.d" }
   let(:configfile)  { "#{configdir}/dnsmasq.conf" }
   let(:datadir)     { "#{boxen_home}/data/dnsmasq" }
   let(:logdir)      { "#{boxen_home}/log/dnsmasq" }
@@ -16,6 +17,7 @@ describe 'dnsmasq' do
     'host'       => "127.0.0.1",
     'tld'        => tld,
     'configdir'  => configdir,
+    'searchdir'  => searchdir,
     'datadir'    => datadir,
     'logdir'     => logdir,
     'configfile' => configfile,
