@@ -12,6 +12,13 @@ consistently resolve to `127.0.0.1`.
 include dnsmasq
 ```
 
+### Using a domain other than .dev
+If you wish to use something other than ```.dev``` you can set call your class with the following:
+
+```puppet
+class { 'dnsmasq': tld => 'docker' }
+```
+
 ## Required Puppet Modules
 
 * `boxen`
