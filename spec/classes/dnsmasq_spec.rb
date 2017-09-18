@@ -79,7 +79,6 @@ describe 'dnsmasq' do
       'executable' => executable,
     }}
     it do
-
       should contain_file(configfile).with({
         :notify  => "Service[#{service_name}]",
         :require => "File[#{configdir}]",
