@@ -56,7 +56,7 @@ class dnsmasq(
   }
 
   package { 'boxen/brews/dnsmasq':
-    ensure => '2.76-boxen2',
+    ensure => '2.76-boxen3',
     notify => Service[$service],
   }
 
