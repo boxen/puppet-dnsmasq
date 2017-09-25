@@ -3,7 +3,7 @@ class Dnsmasq < Formula
   homepage "http://www.thekelleys.org.uk/dnsmasq/doc.html"
   url "http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.gz"
   sha256 "777c4762d2fee3738a0380401f2d087b47faa41db2317c60660d69ad10a76c32"
-  version "2.76-boxen2"
+  version "2.76-boxen3"
 
   bottle do
     cellar :any_skip_relocation
@@ -26,7 +26,7 @@ class Dnsmasq < Formula
     ENV.deparallelize
 
     # Fix etc location
-    inreplace "src/config.h", "/etc/dnsmasq.conf", "#{etc}/dnsmasq.conf"
+    inreplace "src/config.h", "/etc/dnsmasq.conf", "#{etc}/boxen/dnsmasq/dnsmasq.conf"
 
     # Optional IDN support
     if build.with? "libidn"
