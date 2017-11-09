@@ -4,18 +4,21 @@
 #
 #   include dnsmasq
 class dnsmasq(
-  $host       = undef,
-  $tld        = undef,
-
-  $configdir  = undef,
-  $configfile = undef,
-  $datadir    = undef,
-  $executable = undef,
-  $logdir     = undef,
-  $logfile    = undef,
+  $host         = undef,
+  $tld          = 'dev',
+  $service_name = undef,
+  $configdir    = undef,
+  $configfile   = undef,
+  $datadir      = undef,
+  $executable   = undef,
+  $logdir       = undef,
+  $logfile      = undef,
 ) {
   require homebrew
-  $servicename = 'dev.dnsmasq'
+
+  if ! $service_name {
+    $service = "${tld}.dnsmasq"
+  }
 
   file { [$configdir, $logdir, $datadir]:
     ensure => directory,
@@ -23,14 +26,14 @@ class dnsmasq(
 
   file { "${configdir}/dnsmasq.conf":
     content => template('dnsmasq/dnsmasq.conf.erb'),
-    notify  => Service[$servicename],
+    notify  => Service[$service],
     require => File[$configdir],
   }
 
-  file { '/Library/LaunchDaemons/dev.dnsmasq.plist':
-    content => template('dnsmasq/dev.dnsmasq.plist.erb'),
+  file { "/Library/LaunchDaemons/${service}.plist":
+    content => template('dnsmasq/dnsmasq.plist.erb'),
     group   => 'wheel',
-    notify  => Service[$servicename],
+    notify  => Service[$service],
     owner   => 'root',
   }
 
@@ -45,7 +48,7 @@ class dnsmasq(
     group   => 'wheel',
     owner   => 'root',
     require => File['/etc/resolver'],
-    notify  => Service[$servicename],
+    notify  => Service[$service],
   }
 
   homebrew::formula { 'dnsmasq':
@@ -53,17 +56,17 @@ class dnsmasq(
   }
 
   package { 'boxen/brews/dnsmasq':
-    ensure => '2.71-boxen1',
-    notify => Service[$servicename],
+    ensure => '2.76-boxen3',
+    notify => Service[$service],
   }
 
-  service { $servicename:
+  service { $service:
     ensure  => running,
     require => Package['boxen/brews/dnsmasq'],
   }
 
   service { 'com.boxen.dnsmasq': # replaced by dev.dnsmasq
-    before => Service[$servicename],
+    before => Service[$service],
     enable => false,
   }
 }

@@ -1,36 +1,55 @@
-require 'formula'
-
 class Dnsmasq < Formula
-  homepage 'http://www.thekelleys.org.uk/dnsmasq/doc.html'
-  url 'http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.71.tar.gz'
-  sha1 'b0a39f66557c966629a0ed9282cd87df8f409004'
-  version '2.71-boxen1'
+  desc "Lightweight DNS forwarder and DHCP server"
+  homepage "http://www.thekelleys.org.uk/dnsmasq/doc.html"
+  url "http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.gz"
+  sha256 "777c4762d2fee3738a0380401f2d087b47faa41db2317c60660d69ad10a76c32"
+  version "2.76-boxen3"
 
-  def options
-    [['--with-idn', "Compile with IDN support"]]
+  bottle do
+    cellar :any_skip_relocation
+    sha256 "98d0c8520998b8038c610e43db5fc2f215a164c02810718e6e508d4651f6f523" => :sierra
+    sha256 "be3f214a1a48bee2aa64f8602d1227a1fb7f60ad7e30d1241b3e5b8410ec40b1" => :el_capitan
+    sha256 "ff12dc78fd0b31297e333c991d37d8c1f6979d753755ddc8c09d5153cbf54a22" => :yosemite
+    sha256 "56cfdbe6df3ecff3a6ccf444d8fd79fb234f2b566abc1a4a4631d960eb16851a" => :mavericks
   end
 
-  depends_on "libidn" if ARGV.include? '--with-idn'
-  depends_on 'pkg-config' => :build
+  option "with-libidn", "Compile with IDN support"
+  option "with-dnssec", "Compile with DNSSEC support"
+
+  deprecated_option "with-idn" => "with-libidn"
+
+  depends_on "pkg-config" => :build
+  depends_on "libidn" => :optional
+  depends_on "nettle" if build.with? "dnssec"
 
   def install
     ENV.deparallelize
 
     # Fix etc location
-    inreplace "src/config.h", "/etc/dnsmasq.conf",
-      "/opt/boxen/config/dnsmasq/dnsmasq.conf"
+    inreplace "src/config.h", "/etc/dnsmasq.conf", "#{etc}/boxen/dnsmasq/dnsmasq.conf"
 
     # Optional IDN support
-    if ARGV.include? '--with-idn'
+    if build.with? "libidn"
       inreplace "src/config.h", "/* #define HAVE_IDN */", "#define HAVE_IDN"
     end
 
+    # Optional DNSSEC support
+    if build.with? "dnssec"
+      inreplace "src/config.h", "/* #define HAVE_DNSSEC */", "#define HAVE_DNSSEC"
+    end
+
     # Fix compilation on Lion
-    ENV.append_to_cflags "-D__APPLE_USE_RFC_3542" if 10.7 <= MACOS_VERSION.to_f
+    ENV.append_to_cflags "-D__APPLE_USE_RFC_3542" if MacOS.version >= :lion
     inreplace "Makefile" do |s|
       s.change_make_var! "CFLAGS", ENV.cflags
     end
 
-    system "make install PREFIX=#{prefix}"
+    system "make", "install", "PREFIX=#{prefix}"
+
+    prefix.install "dnsmasq.conf.example"
+  end
+
+  test do
+    system "#{sbin}/dnsmasq", "--test"
   end
 end
