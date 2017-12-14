@@ -16,9 +16,7 @@ class dnsmasq(
 ) {
   require homebrew
 
-  if ! $service_name {
-    $service = "${tld}.dnsmasq"
-  }
+  $service = 'dev.dnsmasq'
 
   file { [$configdir, $logdir, $datadir]:
     ensure => directory,
