@@ -88,7 +88,7 @@ describe 'dnsmasq' do
         :group   => 'wheel',
         :notify  => "Service[#{service_name}]",
         :owner   => 'root',
-      }).with_content(%r{<string>#{tld}.dnsmasq</string>})
+      }).with_content(%r{<string>dev.dnsmasq</string>})
 
       should contain_file('/etc/resolver/vagrant').with({
         :content => 'nameserver 127.0.0.1',
